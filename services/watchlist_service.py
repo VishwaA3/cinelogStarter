@@ -14,18 +14,17 @@ class AlreadyInWatchlistError(Exception):
 
 def add_to_watchlist(user_id, film_id):
     """
-    Add a film to a user's watchlist.
+    Save a film to a user's watchlist.
 
     Args:
         user_id (str): UUID of the user.
-        film_id (str): UUID of the film.
+        film_id (str): UUID of the film
 
     Returns:
         WatchlistEntry: The newly created entry.
 
     Raises:
         FilmNotFoundError: If film_id does not exist.
-        AlreadyInWatchlistError: If the film is already on the user's watchlist.
     """
     film = db.session.get(Film, film_id)
     if film is None:
