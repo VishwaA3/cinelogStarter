@@ -1,4 +1,6 @@
 # PR Response Doc: CineLog Watchlist Feature 
+## Comment 1: Rename
+**What I did:** Renamed `save_to_watchlist()` to `add_to_watchlist()` in `services/watchlist_service.py` to match the project's `verb_to_noun` naming convention used by `add_to_collection()`. Updated the import and call site in `routes/watchlist/watchlist.py` (the `add_film` route handler).
 **How I verified:** Searched the codebase for all references to `save_to_watchlist` to confirm only one call site existed (`routes/watchlist/watchlist.py`). Ran the full test suite (`pytest tests/ -v`) after the change to confirm nothing broke.
 
 ## Comment 2: Deduplication
@@ -35,6 +37,14 @@ Adds a watchlist feature to CineLog, allowing users to save films they want to w
 1. Start the app: `python app.py`
 2. Create a user and a film via their respective endpoints (or use existing seed data).
 3. Add a film to a user's watchlist:
+curl -X POST http://127.0.0.1:5000/watchlist/<user_id>/add -H "Content-Type: application/json" -d "{"film_id": "<film_id>"}"
+
+4. View the watchlist:
+curl http://127.0.0.1:5000/watchlist/<user_id>
+
+5. Confirm the returned film includes `date_added` and `public: true`.
+6. Try adding the same film again — confirm you get an `AlreadyInWatchlistError` (500 response) instead of a duplicate entry.
+7. Run the automated test suite: `pytest tests/ -v` — all 5 tests should pass.
 
 ## Commit History Screenshot
 ![git log commits](images/screenshot.png)
